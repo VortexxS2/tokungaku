@@ -20,6 +20,7 @@ TokungakuApp.ui = {
         document.getElementById('upload-image-btn').addEventListener('click', this.triggerImageUpload.bind(this));
         document.getElementById('remove-image-btn').addEventListener('click', this.removeImage.bind(this));
         this.uploadInput.addEventListener('change', this.handleImageUpload.bind(this));
+        document.getElementById('new-project-btn').addEventListener('click', this.createNewProject.bind(this));
         
         // Initialize grid appearance controls
         this.initGridAppearance();
@@ -211,6 +212,61 @@ TokungakuApp.ui = {
                 document.getElementById('opacity-value').textContent = `${opacity}%`;
             }
         }
+    },
+
+    createNewProject: function() {
+        // Check if there are unsaved changes
+        if (TokungakuApp.state.modified) {
+            const confirmNew = confirm('You have unsaved changes. Are you sure you want to create a new project?');
+            if (!confirmNew) {
+                return; // User cancelled
+            }
+        }
+        
+        // Reset application state
+        TokungakuApp.state.notes = [];
+        TokungakuApp.state.selectedNoteId = null;
+        TokungakuApp.state.modified = false;
+        
+        // Reset configuration to defaults
+        TokungakuApp.config.columns = 32;
+        TokungakuApp.config.bpm = 120;
+        
+        // Reset UI elements
+        document.getElementById('bpm').value = 120;
+        document.getElementById('steps').value = 32;
+        document.getElementById('time-signature').value = 4;
+        
+        // Reset instrument to default (if instrument selection is implemented)
+        if (document.getElementById('instrument-select')) {
+            document.getElementById('instrument-select').value = 'piano';
+            if (TokungakuApp.audio && typeof TokungakuApp.audio.selectInstrument === 'function') {
+                TokungakuApp.audio.selectInstrument('piano');
+            }
+        }
+        
+        // Remove any background image
+        this.removeImage();
+        
+        // Reset grid
+        TokungakuApp.grid.calculateDimensions();
+        TokungakuApp.grid.render();
+        
+        // Clear notes
+        TokungakuApp.notes.nextNoteId = 1;
+        TokungakuApp.notes.container.innerHTML = '';
+        
+        // Disable note control buttons
+        document.getElementById('delete-note-btn').disabled = true;
+        document.getElementById('increase-length-btn').disabled = true;
+        document.getElementById('decrease-length-btn').disabled = true;
+        
+        // Stop any playback
+        if (TokungakuApp.audio.playbackState.isPlaying) {
+            TokungakuApp.audio.stopPlayback();
+        }
+        
+        console.log('New project created');
     },
     
     /**
