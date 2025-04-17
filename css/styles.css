@@ -259,3 +259,17 @@ input[type="range"] {
     min-width: 40px;
     text-align: right;
 }
+
+.usage-guide {
+    margin-bottom: 1.5rem;
+}
+
+.usage-guide ol {
+    margin-top: 0.5rem;
+    padding-left: 1.5rem;
+}
+
+.usage-guide li {
+    margin-bottom: 0.3rem;
+    font-size: 0.9rem;
+}
