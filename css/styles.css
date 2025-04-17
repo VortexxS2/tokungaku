@@ -306,3 +306,12 @@ input[type="range"] {
     pointer-events: none;
     box-shadow: 0 0 5px var(--accent-color); /* Add glow effect */
 }
+
+footer a {
+    color: var(--light-color);
+    text-decoration: underline;
+    transition: color 0.2s;
+}
+footer a:hover {
+    color: var(--accent-color);
+}

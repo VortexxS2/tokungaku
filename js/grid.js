@@ -173,5 +173,15 @@ TokungakuApp.grid = {
         this.calculateDimensions();
         this.render();
         TokungakuApp.notes.renderAll();
+        
+        // Reinitialize playback cursor after resize
+        if (TokungakuApp.audio && typeof TokungakuApp.audio.initPlaybackCursor === 'function') {
+            TokungakuApp.audio.initPlaybackCursor();
+            
+            // If playback is active, update cursor position
+            if (TokungakuApp.audio.playbackState.isPlaying) {
+                TokungakuApp.audio.updatePlaybackCursor(TokungakuApp.audio.playbackState.currentStep);
+            }
+        }
     }
 };
