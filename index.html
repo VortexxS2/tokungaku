@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tokungaku - Visual Music Composition on Images</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <header>
+        <h1>Tokungaku</h1>
+        <div class="controls">
+            <div class="transport-controls">
+                <button id="play-btn" title="Play (Space)">▶</button>
+                <button id="stop-btn" title="Stop (Space)">■</button>
+                <label for="bpm">BPM:</label>
+                <input type="number" id="bpm" min="40" max="300" value="120">
+            </div>
+            <div class="grid-controls">
+                <label for="time-signature">Time Signature:</label>
+                <select id="time-signature">
+                    <option value="4" selected>4/4</option>
+                    <option value="3">3/4</option>
+                    <option value="6">6/8</option>
+                </select>
+                <label for="steps">Steps:</label>
+                <input type="number" id="steps" min="4" max="64" value="32">
+            </div>
+            <div class="file-controls">
+                <button id="export-midi-btn">Export MIDI</button>
+                <button id="save-project-btn">Save Project</button>
+                <button id="load-project-btn">Load Project</button>
+            </div>
+        </div>
+    </header>
+    
+    <main>
+        <div class="sidebar">
+            <div class="image-controls">
+                <input type="file" id="image-upload" accept="image/*" hidden>
+                <button id="upload-image-btn">Upload Image</button>
+                <button id="remove-image-btn" disabled>Remove Image</button>
+            </div>
+            <div class="note-controls">
+                <h3>Note Options</h3>
+                <button id="add-note-btn" title="Add Note (A)">Add Note</button>
+                <button id="delete-note-btn" title="Delete Note (D)" disabled>Delete Note</button>
+                <div class="note-length">
+                    <button id="increase-length-btn" title="Increase Length (W)" disabled>+</button>
+                    <button id="decrease-length-btn" title="Decrease Length (S)" disabled>-</button>
+                </div>
+            </div>
+            <div class="keyboard-shortcuts">
+                <h3>Keyboard Shortcuts</h3>
+                <ul>
+                    <li><strong>A</strong>: Add note</li>
+                    <li><strong>D</strong>: Delete selected note</li>
+                    <li><strong>W</strong>: Increase note length</li>
+                    <li><strong>S</strong>: Decrease note length</li>
+                    <li><strong>Arrow keys</strong>: Move selected note</li>
+                    <li><strong>Space</strong>: Play/Stop</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="editor-container">
+            <div id="editor-area">
+                <div id="image-container"></div>
+                <div id="grid-overlay"></div>
+                <div id="notes-layer"></div>
+            </div>
+        </div>
+    </main>
+    
+    <footer>
+        <p>Tokungaku - Piano Roll Sequencer with Image Background</p>
+    </footer>
+
+    <script src="js/app.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/grid.js"></script>
+    <script src="js/notes.js"></script>
+    <script src="js/audio.js"></script>
+    <script src="js/ui.js"></script>
+</body>
+</html>
