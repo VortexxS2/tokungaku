@@ -85,42 +85,41 @@ TokungakuApp.audio = {
                     type: "sawtooth"
                 },
                 envelope: {
-                    attack: 0.05,
-                    decay: 0.2,
-                    sustain: 0.4,
-                    release: 1.4
+                    attack: 0.005,
+                    decay: 0.1,
+                    sustain: 0.3,
+                    release: 0.2
                 },
                 filterEnvelope: {
-                    attack: 0.05,
-                    decay: 0.2,
-                    sustain: 0.4,
-                    release: 1.4,
+                    attack: 0,
+                    decay: 0.1,
+                    sustain: 0.2,
+                    release: 0.1,
                     baseFrequency: 200,
                     octaves: 2
                 }
             }).toDestination(),
             
-            guitar: new Tone.PolySynth(Tone.FMSynth, {
+            guitar: new Tone.PolySynth(Tone.MonoSynth, {
                 polyphony: 6,
                 voice: {
-                    harmonicity: 1.5,
-                    modulationIndex: 10,
                     oscillator: {
-                        type: "triangle"
-                    },
-                    envelope: {
-                        attack: 0.01,
-                        decay: 0.2,
-                        sustain: 0.2,
-                        release: 1.5
-                    },
-                    modulation: {
-                        type: "square"
-                    },
-                    modulationEnvelope: {
-                        attack: 0.5,
-                        decay: 0.01
+                        type: "sawtooth"
                     }
+                },
+                envelope: {
+                    attack: 0,
+                    decay: 0.1,
+                    sustain: 0.3,
+                    release: 0.6
+                },
+                filterEnvelope: {
+                    attack: 0,
+                    decay: 0.1,
+                    sustain: 0.8,
+                    release: 0.1,
+                    baseFrequency: 800,
+                    octaves: 2
                 }
             }).toDestination(),
             
@@ -547,7 +546,7 @@ TokungakuApp.audio = {
                 piano: 0,      // Acoustic Grand Piano
                 synth: 80,     // Synth Lead
                 bass: 32,      // Acoustic Bass
-                guitar: 24,    // Acoustic Guitar (nylon)
+                guitar: 27,    // Electric Guitar (clean)
                 violin: 40,    // Violin
                 flute: 73,     // Flute
                 drums: 118,    // Synth Drum
