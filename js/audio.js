@@ -238,9 +238,11 @@ TokungakuApp.audio = {
     // Update cursor position (add this to audio.js)
     updatePlaybackCursor: function(step) {
         const cursor = document.getElementById('playback-cursor');
+        // If cursor doesn't exist, recreate it
         if (!cursor) {
-            console.error('Playback cursor element not found!');
-            return;
+            console.log('Playback cursor not found, recreating...');
+            this.initPlaybackCursor();
+            cursor = document.getElementById('playback-cursor');
         }
         
         if (step !== undefined && this.playbackState.isPlaying) {
