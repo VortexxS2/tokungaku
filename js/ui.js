@@ -144,6 +144,17 @@ TokungakuApp.ui = {
             // Update BPM
             TokungakuApp.config.bpm = projectData.config.bpm || 120;
             document.getElementById('bpm').value = TokungakuApp.config.bpm;
+
+            // Update instrument
+            if (projectData.config.instrument) {
+                const instrumentSelect = document.getElementById('instrument-select');
+                instrumentSelect.value = projectData.config.instrument;
+                
+                // Also update the actual instrument in the audio engine
+                if (TokungakuApp.audio && typeof TokungakuApp.audio.selectInstrument === 'function') {
+                    TokungakuApp.audio.selectInstrument(projectData.config.instrument);
+                }
+            }
         }
         
         // Load notes

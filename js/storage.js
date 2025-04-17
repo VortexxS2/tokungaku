@@ -49,8 +49,10 @@ TokungakuApp.storage = {
             config: {
                 columns: TokungakuApp.config.columns,
                 bpm: TokungakuApp.config.bpm,
+                // Add these lines
                 gridColor: TokungakuApp.config.gridColor,
-                gridLineColor: TokungakuApp.config.gridLineColor
+                gridLineColor: TokungakuApp.config.gridLineColor,
+                instrument: document.getElementById('instrument-select').value
             },
             notes: TokungakuApp.state.notes,
             image: TokungakuApp.state.currentImage,
@@ -102,7 +104,11 @@ TokungakuApp.storage = {
             name: projectName,
             config: {
                 columns: TokungakuApp.config.columns,
-                bpm: TokungakuApp.config.bpm
+                bpm: TokungakuApp.config.bpm,
+                // Add these lines
+                gridColor: TokungakuApp.config.gridColor,
+                gridLineColor: TokungakuApp.config.gridLineColor,
+                instrument: document.getElementById('instrument-select').value
             },
             notes: TokungakuApp.state.notes,
             image: TokungakuApp.state.currentImage,

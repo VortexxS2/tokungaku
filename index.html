@@ -16,6 +16,19 @@
                 <label for="bpm">BPM:</label>
                 <input type="number" id="bpm" min="40" max="300" value="120">
             </div>
+            <div class="instrument-control">
+                <label for="instrument-select">Instrument:</label>
+                <select id="instrument-select">
+                    <option value="piano">Piano</option>
+                    <option value="synth">Synth</option>
+                    <option value="bass">Bass</option>
+                    <option value="guitar">Guitar</option>
+                    <option value="violin">Violin</option>
+                    <option value="flute">Flute</option>
+                    <option value="drums">Drums</option>
+                    <option value="xylophone">Xylophone</option>
+                </select>
+            </div>
             <div class="grid-controls">
                 <label for="time-signature">Time Signature:</label>
                 <select id="time-signature">
@@ -98,6 +111,7 @@
         <p>Tokungaku - Piano Roll Sequencer with Image Background</p>
     </footer>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
     <script src="js/app.js"></script>
     <script src="js/storage.js"></script>
     <script src="js/grid.js"></script>

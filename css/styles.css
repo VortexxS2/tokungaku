@@ -273,3 +273,23 @@ input[type="range"] {
     margin-bottom: 0.3rem;
     font-size: 0.9rem;
 }
+
+.instrument-control {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-left: 1rem;
+}
+
+#instrument-select {
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    width: 100px;
+}
+
+/* Adjust transport controls to accommodate instrument selector */
+.transport-controls {
+    flex-wrap: wrap;
+    margin-bottom: 0.5rem;
+}
