@@ -1,13 +1,13 @@
 :root {
-    --primary-color: #8BC34A;
-    --secondary-color: #795548;
-    --accent-color: #FF5722;
+    --primary-color: #303F9F;
+    --secondary-color: #757575;
+    --accent-color: #C2185B;
     --light-color: #ecf0f1;
     --dark-color: #212121;
     --grid-color: transparent;
     --grid-line-color: rgba(255, 255, 255, 0.4);
-    --note-color: rgba(139, 195, 74, 0.7);
-    --note-selected-color: rgba(255, 87, 34, 0.8);
+    --note-color: rgba(63, 138, 255, 0.7);
+    --note-selected-color: rgba(194, 24, 91, 0.8);
     --editor-width: 960px;
 }
 
@@ -65,11 +65,11 @@ button {
 }
 
 button:hover {
-    background-color: #7CB342;
+    background-color: var(--accent-color);
 }
 
 button:disabled {
-    background-color: #95a5a6;
+    background-color: #959595;
     cursor: not-allowed;
 }
 
@@ -313,5 +313,5 @@ footer a {
     transition: color 0.2s;
 }
 footer a:hover {
-    color: var(--accent-color);
+    color: var(--light-color);
 }
