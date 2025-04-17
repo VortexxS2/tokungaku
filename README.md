@@ -80,19 +80,3 @@ Tokungaku is built with vanilla JavaScript and doesn't require any external libr
 
 - MIDI export is currently implemented as a JSON representation. A proper MIDI export would require a MIDI library.
 - Audio playback uses simple sine wave oscillators. More advanced sound synthesis would improve the audio quality.
-
-## Future Improvements
-
-- Implement proper MIDI export using a MIDI library
-- Add more advanced sound synthesis options
-- Support for multiple tracks/instruments
-- Undo/redo functionality
-- More keyboard shortcuts and usability improvements
-
-## License
-
-[MIT License](LICENSE)
-
-## Author
-
-[Your Name] - [your-email@example.com]
