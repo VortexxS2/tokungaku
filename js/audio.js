@@ -508,45 +508,121 @@ TokungakuApp.audio = {
             return;
         }
         
-        // Create MIDI file data
+        // Check if midi-writer-js is available
+        if (typeof MidiWriter === 'undefined') {
+            alert('MIDI export library not loaded. Make sure midi-writer-js is included in your project.');
+            return;
+        }
+        
         try {
-            // For simplicity, we'll create a data URL with a JSON representation
-            // In a real implementation, this would use a library like midi.js
+            // Create a new track
+            const track = new MidiWriter.Track();
             
-            // Create a JSON representation of the notes
-            const midiData = {
-                bpm: TokungakuApp.config.bpm,
-                timeSignature: document.getElementById('time-signature').value,
-                instrument: document.getElementById('instrument-select').value,
-                notes: TokungakuApp.state.notes.map(note => {
-                    // Convert to MIDI note number
-                    const midiNote = this.gridRowToMIDINote(note.row);
-                    
-                    return {
-                        note: midiNote,
-                        noteName: this.midiNoteToNoteName(midiNote),
-                        start: note.col,
-                        duration: note.length
-                    };
-                })
+            // Set tempo
+            track.setTempo(TokungakuApp.config.bpm);
+            
+            // Get time signature
+            const timeSignatureValue = parseInt(document.getElementById('time-signature').value);
+            
+            // Set time signature (numerator, denominator)
+            // For 4/4, 3/4, etc. the denominator is 4
+            // For 6/8, the denominator is 8
+            let denominator = 4;
+            if (timeSignatureValue === 6) {
+                denominator = 8;
+            }
+            
+            track.setTimeSignature(timeSignatureValue, denominator);
+            
+            // Set instrument (MIDI program change)
+            // Map our instrument names to General MIDI program numbers
+            const instrumentMap = {
+                piano: 0,      // Acoustic Grand Piano
+                synth: 80,     // Synth Lead
+                bass: 32,      // Acoustic Bass
+                guitar: 24,    // Acoustic Guitar (nylon)
+                violin: 40,    // Violin
+                flute: 73,     // Flute
+                drums: 118,    // Synth Drum
+                xylophone: 13  // Marimba
             };
             
-            // Convert to data URL
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(midiData, null, 2));
+            // Get selected instrument
+            const selectedInstrument = document.getElementById('instrument-select').value;
             
-            // Create download link
-            const downloadAnchorNode = document.createElement('a');
-            downloadAnchorNode.setAttribute("href", dataStr);
-            downloadAnchorNode.setAttribute("download", "tokungaku_sequence.json");
-            document.body.appendChild(downloadAnchorNode);
-            downloadAnchorNode.click();
-            downloadAnchorNode.remove();
+            // Set program change (instrument)
+            const programNumber = instrumentMap[selectedInstrument] || 0;
+            track.addEvent(new MidiWriter.ProgramChangeEvent({instrument: programNumber}));
             
-            alert('MIDI sequence exported successfully (as JSON format).\n\nNote: In a real implementation, this would generate a proper MIDI file using a library like midi.js.');
+            // Calculate ticks per step (using 128 ticks per quarter note as standard)
+            const TICKS_PER_QUARTER = 128;
+            const STEPS_PER_MEASURE = TokungakuApp.config.columns / (timeSignatureValue === 6 ? 2 : 4);
+            const TICKS_PER_STEP = TICKS_PER_QUARTER / (STEPS_PER_MEASURE / timeSignatureValue);
+            
+            // Process notes
+            TokungakuApp.state.notes.forEach(note => {
+                // Convert grid row to MIDI note number
+                const midiNote = this.gridRowToMIDINote(note.row);
+                
+                // Calculate start position and duration in ticks
+                const startTick = Math.round(note.col * TICKS_PER_STEP);
+                const durationTicks = Math.round(note.length * TICKS_PER_STEP);
+                
+                // Create note event
+                const noteEvent = new MidiWriter.NoteEvent({
+                    pitch: [midiNote],
+                    duration: 'T' + durationTicks,
+                    startTick: startTick,
+                    velocity: 100
+                });
+                
+                // Add note to track
+                track.addEvent(noteEvent);
+            });
+            
+            // Create writer and generate MIDI file
+            const writer = new MidiWriter.Writer([track]);
+            
+            // Generate filename based on current date/time
+            const now = new Date();
+            const filename = 'tokungaku_' + 
+                now.getFullYear() + 
+                ('0' + (now.getMonth() + 1)).slice(-2) + 
+                ('0' + now.getDate()).slice(-2) + 
+                '_' + 
+                ('0' + now.getHours()).slice(-2) + 
+                ('0' + now.getMinutes()).slice(-2) + 
+                '.mid';
+            
+            // Create download link with data URI
+            const dataUri = writer.dataUri();
+            const downloadLink = document.createElement('a');
+            downloadLink.href = dataUri;
+            downloadLink.download = filename;
+            
+            // Append to document, click and remove
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+            
+            console.log('MIDI file exported successfully');
         } catch (e) {
             console.error('Error exporting MIDI:', e);
             alert('Error exporting MIDI file: ' + e.message);
         }
+    },
+
+    /**
+     * Helper method to convert grid row to MIDI note
+     * (This should already exist in your code, but ensuring it's here for completeness)
+     */
+    gridRowToMIDINote: function(row) {
+        // Convert grid row to MIDI note number (C3 = 60)
+        // Reverse the row (0 = highest note, 35 = lowest note)
+        const reversedRow = TokungakuApp.config.rows - 1 - row;
+        
+        // C3 (MIDI 60) is row 24 (in our 36-row grid, from bottom)
+        return 60 + (reversedRow - 24);
     },
     
     /**
