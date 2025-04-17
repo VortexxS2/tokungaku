@@ -41,6 +41,9 @@ TokungakuApp.audio = {
             
             // Select default instrument
             this.selectInstrument('piano');
+
+            // Initialize playback cursor
+            this.initPlaybackCursor();
         } catch (e) {
             console.error('Web Audio API is not supported in this browser', e);
             alert('Your browser does not support Web Audio API, which is required for playback.');
@@ -187,6 +190,74 @@ TokungakuApp.audio = {
             console.error(`Instrument "${instrumentName}" not found`);
         }
     },
+
+    // Initialize playback cursor (add to the init method after other initialization)
+    initPlaybackCursor: function() {
+        console.log('Initializing playback cursor');
+        
+        // Remove existing cursor if present
+        const existingCursor = document.getElementById('playback-cursor');
+        if (existingCursor) {
+            existingCursor.remove();
+        }
+        
+        // Create new cursor element
+        const cursor = document.createElement('div');
+        cursor.id = 'playback-cursor';
+        cursor.className = 'playback-cursor';
+        cursor.style.display = 'none';
+        
+        // Add to notes layer (better visibility)
+        const notesLayer = document.getElementById('notes-layer');
+        if (notesLayer) {
+            notesLayer.appendChild(cursor);
+            console.log('Cursor added to notes layer');
+        } else {
+            console.error('Notes layer not found!');
+            
+            // Fallback to grid overlay
+            const gridOverlay = document.getElementById('grid-overlay');
+            if (gridOverlay) {
+                gridOverlay.appendChild(cursor);
+                console.log('Cursor added to grid overlay');
+            } else {
+                console.error('Grid overlay not found!');
+                
+                // Last resort - add to editor area
+                const editorArea = document.getElementById('editor-area');
+                if (editorArea) {
+                    editorArea.appendChild(cursor);
+                    console.log('Cursor added to editor area');
+                } else {
+                    console.error('Editor area not found!');
+                }
+            }
+        }
+    },
+
+    // Update cursor position (add this to audio.js)
+    updatePlaybackCursor: function(step) {
+        const cursor = document.getElementById('playback-cursor');
+        if (!cursor) {
+            console.error('Playback cursor element not found!');
+            return;
+        }
+        
+        if (step !== undefined && this.playbackState.isPlaying) {
+            // Position the cursor at the current step
+            const columnWidth = TokungakuApp.grid.cellWidth;
+            const xPosition = step * columnWidth;
+            
+            console.log(`Updating cursor position: step ${step}, position ${xPosition}px`);
+            
+            cursor.style.display = 'block';
+            cursor.style.left = xPosition + 'px';
+        } else {
+            // Hide cursor when not playing
+            console.log('Hiding cursor');
+            cursor.style.display = 'none';
+        }
+    },
     
     /**
      * Handle instrument selection change
@@ -228,6 +299,8 @@ TokungakuApp.audio = {
         this.playbackState.isPlaying = true;
         this.playbackState.currentStep = 0;
         this.playbackState.startTime = this.context.currentTime;
+        // Show playback cursor
+        this.updatePlaybackCursor(0);
         
         // Calculate step duration in seconds
         const bpm = document.getElementById('bpm').value;
@@ -277,6 +350,8 @@ TokungakuApp.audio = {
         // Reset playback state
         this.playbackState.isPlaying = false;
         this.playbackState.currentStep = 0;
+        // Hide playback cursor
+        this.updatePlaybackCursor();
         
         // Update UI
         document.getElementById('play-btn').disabled = false;
@@ -319,6 +394,9 @@ TokungakuApp.audio = {
         const notesToPlay = TokungakuApp.state.notes.filter(note => 
             step >= note.col && step < note.col + note.length
         );
+
+        // Update cursor position
+        this.updatePlaybackCursor(step);
         
         // Play each note with a tiny time offset to prevent overlap
         notesToPlay.forEach((note, index) => {
@@ -490,3 +568,12 @@ TokungakuApp.audio = {
         }
     }
 };
+
+window.addEventListener('DOMContentLoaded', function() {
+    if (TokungakuApp.audio && typeof TokungakuApp.audio.initPlaybackCursor === 'function') {
+        // Slight delay to ensure all elements are loaded
+        setTimeout(function() {
+            TokungakuApp.audio.initPlaybackCursor();
+        }, 500);
+    }
+});

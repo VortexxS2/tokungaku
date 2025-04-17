@@ -293,3 +293,16 @@ input[type="range"] {
     flex-wrap: wrap;
     margin-bottom: 0.5rem;
 }
+
+.playback-cursor {
+    position: absolute;
+    top: 0;
+    left: 0; /* Start position */
+    width: 4px; /* Make it a bit wider */
+    height: 100%;
+    background-color: var(--accent-color);
+    z-index: 25; /* Ensure it's above other elements */
+    opacity: 0.8;
+    pointer-events: none;
+    box-shadow: 0 0 5px var(--accent-color); /* Add glow effect */
+}
