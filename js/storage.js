@@ -48,7 +48,9 @@ TokungakuApp.storage = {
         const appState = {
             config: {
                 columns: TokungakuApp.config.columns,
-                bpm: TokungakuApp.config.bpm
+                bpm: TokungakuApp.config.bpm,
+                gridColor: TokungakuApp.config.gridColor,
+                gridLineColor: TokungakuApp.config.gridLineColor
             },
             notes: TokungakuApp.state.notes,
             image: TokungakuApp.state.currentImage,

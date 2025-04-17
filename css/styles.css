@@ -221,3 +221,41 @@ footer {
         align-items: flex-start;
     }
 }
+
+
+.grid-appearance {
+    margin-bottom: 1.5rem;
+}
+
+.color-control,
+.opacity-control {
+    margin-top: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.opacity-control {
+    flex-wrap: wrap;
+}
+
+input[type="color"] {
+    width: 40px;
+    height: 30px;
+    padding: 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+input[type="range"] {
+    flex: 1;
+    min-width: 120px;
+}
+
+#opacity-value {
+    font-size: 0.8rem;
+    color: var(--dark-color);
+    min-width: 40px;
+    text-align: right;
+}

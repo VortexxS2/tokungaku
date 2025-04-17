@@ -14,7 +14,9 @@ TokungakuApp = {
         rows: 36, // 3 octaves
         columns: 32, // default 4/4 time signature with 32 steps
         maxColumns: 64,
-        bpm: 120
+        bpm: 120,
+        gridColor: 'rgba(255, 255, 255, 0.2)',
+        gridLineColor: 'rgba(255, 255, 255, 0.4)'
     },
     state: {
         currentImage: null,

@@ -28,12 +28,11 @@ cd tokungaku
 
 ### Usage
 
-1. Open `index.html` in a web browser.
-2. (Optional) Upload a background image.
-3. Add notes by clicking on the grid.
-4. Adjust note properties using the controls or keyboard shortcuts.
-5. Play back the sequence with the play button or spacebar.
-6. Save your project to local storage.
+1. (Optional) Upload a background image.
+1. Add notes by clicking on the grid.
+1. Adjust note properties using the controls or keyboard shortcuts.
+1. Play back the sequence with the play button or spacebar.
+1. Save your project to local storage.
 
 ## Project Structure
 
