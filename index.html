@@ -6,7 +6,6 @@
     <title>Tokungaku - musical canvas that transforms your images into melodic experiences</title>
     <link rel="stylesheet" href="css/styles.css?v=2025-04-19">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-
     <script src="https://cdn.jsdelivr.net/npm/midi-writer-js@3.1.1/browser/midiwriter.min.js"></script>
 </head>
 <body>
@@ -14,8 +13,8 @@
         <h1>Tokungaku</h1>
         <div class="controls">
             <div class="transport-controls">
-                <button id="play-btn" title="Play (Space)"><i class="bi bi-play-fill"></i></button>
-                <button id="stop-btn" title="Stop (Space)"><i class="bi bi-stop-fill"></i></button>
+                <button id="play-btn" title="Play (Space)">▶</button>
+                <button id="stop-btn" title="Stop (Space)">■</button>
                 <label for="bpm">BPM:</label>
                 <input type="number" id="bpm" min="40" max="300" value="120">
             </div>
@@ -62,11 +61,15 @@
                 <div class="control-section">
                     <h4>Project</h4>
                     <div class="control-group">
-                        <button id="new-project-btn" title="New Project"><i class="bi bi-file-earmark"></i></button>
-                        <button id="save-project-btn" title="Export Project"><i class="bi bi-cloud-arrow-down"></i></button>
-                        <button id="load-project-btn" title="Import Project"><i class="bi bi-cloud-arrow-up"></i></button>
-                        <button id="clear-notes-btn-sidebar" title="Clear All Notes"><i class="bi bi-x-circle"></i></button>
-                        <button id="export-midi-btn" title="Export MIDI"><i class="bi bi-file-earmark-music"></i></button>
+                        <div class="button-row">
+                            <button id="save-project-btn" title="Export Project"><i class="bi bi-cloud-arrow-down"></i></button>
+                            <button id="load-project-btn" title="Import Project"><i class="bi bi-cloud-arrow-up"></i></button>
+                            <button id="export-midi-btn" title="Export MIDI"><i class="bi bi-file-earmark-music"></i></button>
+                        </div>
+                        <div class="button-row">
+                            <button id="clear-notes-btn-sidebar" title="Clear All Notes"><i class="bi bi-x-circle"></i></button>
+                            <button id="new-project-btn" title="New Project"><i class="bi bi-file-earmark"></i></button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -139,6 +142,7 @@
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
     <script src="js/app.js?v=2025-04-19"></script>
+    <script src="js/tooltip.js?v=2025-04-19"></script>
     <script src="js/storage.js?v=2025-04-19"></script>
     <script src="js/grid.js?v=2025-04-19"></script>
     <script src="js/notes.js?v=2025-04-19"></script>

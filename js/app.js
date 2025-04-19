@@ -43,6 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
     TokungakuApp.notes.init();
     TokungakuApp.audio.init();
     TokungakuApp.ui.init();
+    TokungakuApp.tooltip.init();
     
     console.log('Tokungaku initialized successfully');
 });
