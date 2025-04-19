@@ -56,6 +56,7 @@ TokungakuApp.storage = {
             },
             notes: TokungakuApp.state.notes,
             image: TokungakuApp.state.currentImage,
+            imageRotation: TokungakuApp.state.imageRotation || 0,
             savedAt: new Date().toISOString()
         };
         

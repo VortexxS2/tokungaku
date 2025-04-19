@@ -22,6 +22,7 @@ TokungakuApp.ui = {
         // Set up event listeners
         document.getElementById('upload-image-btn').addEventListener('click', this.triggerImageUpload.bind(this));
         document.getElementById('remove-image-btn').addEventListener('click', this.removeImage.bind(this));
+        document.getElementById('rotate-image-btn').addEventListener('click', this.rotateImage.bind(this));
         this.uploadInput.addEventListener('change', this.handleImageUpload.bind(this));
         document.getElementById('new-project-btn').addEventListener('click', this.createNewProject.bind(this));
         
@@ -31,6 +32,9 @@ TokungakuApp.ui = {
         if (sidebarClearBtn) {
             sidebarClearBtn.addEventListener('click', this.clearAllNotes.bind(this));
         }
+        
+        // Register keyboard listener for UI shortcuts
+        document.addEventListener('keydown', this.handleKeyDown.bind(this));
         
         // Initialize grid appearance controls
         this.initGridAppearance();
@@ -91,13 +95,15 @@ TokungakuApp.ui = {
                 
                 // Store image data in application state
                 TokungakuApp.state.currentImage = event.target.result;
+                TokungakuApp.state.imageRotation = 0; // Initialize rotation
                 TokungakuApp.state.modified = true;
                 
                 // Update grid dimensions based on image height
                 this.updateGridDimensions();
                 
-                // Enable remove button
+                // Enable remove and rotate buttons
                 document.getElementById('remove-image-btn').disabled = false;
+                document.getElementById('rotate-image-btn').disabled = false;
             };
         };
         
@@ -117,12 +123,42 @@ TokungakuApp.ui = {
         
         // Reset application state
         TokungakuApp.state.currentImage = null;
+        TokungakuApp.state.imageRotation = 0;
         TokungakuApp.state.modified = true;
         
-        // Disable remove button
+        // Disable remove and rotate buttons
         document.getElementById('remove-image-btn').disabled = true;
+        document.getElementById('rotate-image-btn').disabled = true;
         
         // Reset grid dimensions
+        this.updateGridDimensions();
+    },
+    
+    /**
+     * Rotate the current image by 90 degrees clockwise
+     */
+    rotateImage: function() {
+        if (!TokungakuApp.state.currentImage) return;
+        
+        // Get current image
+        const img = this.imageContainer.querySelector('img');
+        if (!img) return;
+        
+        // Initialize rotation value if not present
+        if (TokungakuApp.state.imageRotation === undefined) {
+            TokungakuApp.state.imageRotation = 0;
+        }
+        
+        // Update rotation (add 90 degrees, wrap around after 270)
+        TokungakuApp.state.imageRotation = (TokungakuApp.state.imageRotation + 90) % 360;
+        
+        // Apply rotation
+        img.style.transform = `rotate(${TokungakuApp.state.imageRotation}deg)`;
+        
+        // Mark as modified
+        TokungakuApp.state.modified = true;
+        
+        // Update grid dimensions based on new orientation
         this.updateGridDimensions();
     },
     
@@ -135,7 +171,21 @@ TokungakuApp.ui = {
         
         if (this.imageContainer.firstChild) {
             const img = this.imageContainer.firstChild;
-            const aspectRatio = img.naturalHeight / img.naturalWidth;
+            
+            // Check if image is rotated
+            const rotation = TokungakuApp.state.imageRotation || 0;
+            const isRotated90or270 = rotation === 90 || rotation === 270;
+            
+            // Calculate aspect ratio depending on rotation
+            let aspectRatio;
+            if (isRotated90or270) {
+                // For 90 or 270 degree rotation, swap width and height
+                aspectRatio = img.naturalWidth / img.naturalHeight;
+            } else {
+                // For 0 or 180 degree rotation, use normal aspect ratio
+                aspectRatio = img.naturalHeight / img.naturalWidth;
+            }
+            
             editorHeight = TokungakuApp.config.editorWidth * aspectRatio;
         }
         
@@ -203,6 +253,9 @@ TokungakuApp.ui = {
             // Set next note ID
             TokungakuApp.notes.nextNoteId = maxId + 1;
         }
+        
+        // Store rotation state
+        TokungakuApp.state.imageRotation = projectData.imageRotation || 0;
         
         // Load image
         if (projectData.image) {
@@ -292,6 +345,7 @@ TokungakuApp.ui = {
         // Reset application state
         TokungakuApp.state.notes = [];
         TokungakuApp.state.selectedNoteId = null;
+        TokungakuApp.state.imageRotation = 0;
         TokungakuApp.state.modified = false;
         
         // Reset configuration to defaults
@@ -348,11 +402,19 @@ TokungakuApp.ui = {
             // Store image data in application state
             TokungakuApp.state.currentImage = dataUrl;
             
+            // Apply rotation if it exists in the state
+            if (TokungakuApp.state.imageRotation) {
+                img.style.transform = `rotate(${TokungakuApp.state.imageRotation}deg)`;
+            } else {
+                TokungakuApp.state.imageRotation = 0;
+            }
+            
             // Update grid dimensions based on image height
             this.updateGridDimensions();
             
-            // Enable remove button
+            // Enable remove and rotate buttons
             document.getElementById('remove-image-btn').disabled = false;
+            document.getElementById('rotate-image-btn').disabled = false;
         };
     },
 
@@ -445,6 +507,25 @@ TokungakuApp.ui = {
         TokungakuApp.config.gridLineColor = rgbaLineColor;
         TokungakuApp.state.modified = true;
     },
+    
+    /**
+     * Handle keyboard shortcuts for UI controls
+     * @param {KeyboardEvent} e - Keyboard event
+     */
+    handleKeyDown: function(e) {
+        // Only handle shortcuts if not in an input field
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT' || e.target.tagName === 'TEXTAREA') {
+            return;
+        }
+        
+        // Check for R key to rotate image
+        if (e.key.toLowerCase() === 'r' && !e.ctrlKey && !e.altKey && !e.metaKey) {
+            if (TokungakuApp.state.currentImage) {
+                this.rotateImage();
+                e.preventDefault();
+            }
+        }
+    }
 };
 
 // Helper function to convert hex to RGB
