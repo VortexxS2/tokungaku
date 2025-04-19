@@ -63,16 +63,21 @@ button {
     padding: 0.5rem 1rem;
     border-radius: 4px;
     cursor: pointer;
-    transition: background-color 0.2s;
+    transition: background-color 0.2s, transform 0.1s;
 }
 
 button:hover {
     background-color: var(--accent-color);
 }
 
+button:active {
+    transform: scale(0.95);
+}
+
 button:disabled {
     background-color: #959595;
     cursor: not-allowed;
+    transform: none;
 }
 
 input[type="number"],
@@ -347,22 +352,6 @@ footer a:hover {
 }
 
 /* Style adjustment for file controls */
-.file-controls {
-    flex-wrap: wrap;
-    justify-content: center;
-}
-
-.file-controls button {
-    margin: 0.25rem;
-    font-size: 1.2rem;
-    width: 40px;
-    height: 40px;
-    padding: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
 .control-group {
     display: flex;
     flex-wrap: wrap;
@@ -371,7 +360,7 @@ footer a:hover {
 }
 
 .control-group button {
-    font-size: 1.2rem;
+    font-size: 1rem;
     width: 40px;
     height: 40px;
     padding: 0;
@@ -380,6 +369,26 @@ footer a:hover {
     justify-content: center;
 }
 
+.control-group button i {
+    font-size: 1.25rem;
+}
+
 .editor-controls {
     margin-bottom: 1.5rem;
+}
+
+.control-section {
+    margin-bottom: 1.5rem;
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 0.75rem;
+    border-radius: 4px;
+    border-left: 3px solid var(--accent-color);
+}
+
+.control-section h4 {
+    font-size: 0.9rem;
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+    color: var(--accent-color);
+    font-weight: 600;
 }

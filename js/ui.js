@@ -21,13 +21,11 @@ TokungakuApp.ui = {
         
         // Set up event listeners
         document.getElementById('upload-image-btn').addEventListener('click', this.triggerImageUpload.bind(this));
-        document.getElementById('remove-image-btn').addEventListener('click', this.removeImage.bind(this));
         document.getElementById('rotate-image-btn').addEventListener('click', this.rotateImage.bind(this));
         this.uploadInput.addEventListener('change', this.handleImageUpload.bind(this));
         document.getElementById('new-project-btn').addEventListener('click', this.createNewProject.bind(this));
         
-        // Set up clear notes buttons
-        document.getElementById('clear-notes-btn').addEventListener('click', this.clearAllNotes.bind(this));
+        // Set up clear notes button
         const sidebarClearBtn = document.getElementById('clear-notes-btn-sidebar');
         if (sidebarClearBtn) {
             sidebarClearBtn.addEventListener('click', this.clearAllNotes.bind(this));
@@ -101,8 +99,7 @@ TokungakuApp.ui = {
                 // Update grid dimensions based on image height
                 this.updateGridDimensions();
                 
-                // Enable remove and rotate buttons
-                document.getElementById('remove-image-btn').disabled = false;
+                // Enable rotate button
                 document.getElementById('rotate-image-btn').disabled = false;
             };
         };
@@ -336,7 +333,7 @@ TokungakuApp.ui = {
     createNewProject: function() {
         // Check if there are unsaved changes
         if (TokungakuApp.state.modified) {
-            const confirmNew = confirm('You have unsaved changes. Are you sure you want to clear this project?');
+            const confirmNew = confirm('You have unsaved changes. Are you sure you want to create a new project?');
             if (!confirmNew) {
                 return; // User cancelled
             }
@@ -381,7 +378,7 @@ TokungakuApp.ui = {
             TokungakuApp.audio.stopPlayback();
         }
         
-        console.log('Project cleared');
+        console.log('New project created');
     },
     
     /**
@@ -412,8 +409,7 @@ TokungakuApp.ui = {
             // Update grid dimensions based on image height
             this.updateGridDimensions();
             
-            // Enable remove and rotate buttons
-            document.getElementById('remove-image-btn').disabled = false;
+            // Enable rotate button
             document.getElementById('rotate-image-btn').disabled = false;
         };
     },

@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tokungaku - musical canvas that transforms your images into melodic experiences</title>
     <link rel="stylesheet" href="css/styles.css?v=2025-04-19">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
     <script src="https://cdn.jsdelivr.net/npm/midi-writer-js@3.1.1/browser/midiwriter.min.js"></script>
 </head>
 <body>
@@ -12,8 +14,8 @@
         <h1>Tokungaku</h1>
         <div class="controls">
             <div class="transport-controls">
-                <button id="play-btn" title="Play (Space)">▶</button>
-                <button id="stop-btn" title="Stop (Space)">■</button>
+                <button id="play-btn" title="Play (Space)"><i class="bi bi-play-fill"></i></button>
+                <button id="stop-btn" title="Stop (Space)"><i class="bi bi-stop-fill"></i></button>
                 <label for="bpm">BPM:</label>
                 <input type="number" id="bpm" min="40" max="300" value="120">
             </div>
@@ -40,13 +42,6 @@
                 <label for="steps">Steps:</label>
                 <input type="number" id="steps" min="4" max="64" value="32">
             </div>
-            <div class="file-controls">
-                <button id="export-midi-btn" title="Export MIDI">🎵</button>
-                <button id="save-project-btn" title="Export Project">💾</button>
-                <button id="load-project-btn" title="Import Project">📂</button>
-                <button id="new-project-btn" title="Clear Project">🗑️</button>
-                <button id="clear-notes-btn" title="Clear All Notes">✨</button>
-            </div>
         </div>
     </header>
     
@@ -54,12 +49,25 @@
         <div class="sidebar">
             <div class="editor-controls">
                 <h3>Project Controls</h3>
-                <div class="control-group">
-                    <input type="file" id="image-upload" accept="image/*" hidden>
-                    <button id="upload-image-btn" title="Upload Background Image">🖼️</button>
-                    <button id="remove-image-btn" title="Remove Image" disabled>🖼️❌</button>
-                    <button id="rotate-image-btn" title="Rotate Image" disabled>🔄</button>
-                    <button id="clear-notes-btn-sidebar" title="Clear All Notes">✨</button>
+                
+                <div class="control-section">
+                    <h4>Image</h4>
+                    <div class="control-group">
+                        <input type="file" id="image-upload" accept="image/*" hidden>
+                        <button id="upload-image-btn" title="Upload Background Image"><i class="bi bi-card-image"></i></button>
+                        <button id="rotate-image-btn" title="Rotate Image" disabled><i class="bi bi-arrow-clockwise"></i></button>
+                    </div>
+                </div>
+                
+                <div class="control-section">
+                    <h4>Project</h4>
+                    <div class="control-group">
+                        <button id="new-project-btn" title="New Project"><i class="bi bi-file-earmark"></i></button>
+                        <button id="save-project-btn" title="Export Project"><i class="bi bi-cloud-arrow-down"></i></button>
+                        <button id="load-project-btn" title="Import Project"><i class="bi bi-cloud-arrow-up"></i></button>
+                        <button id="clear-notes-btn-sidebar" title="Clear All Notes"><i class="bi bi-x-circle"></i></button>
+                        <button id="export-midi-btn" title="Export MIDI"><i class="bi bi-file-earmark-music"></i></button>
+                    </div>
                 </div>
             </div>
             <div class="grid-appearance">
@@ -78,12 +86,13 @@
             <div class="usage-guide">
                 <h3>Usage</h3>
                 <ol>
-                    <li>(Optional) Upload a background image with 🖼️.</li>
+                    <li>(Optional) Upload a background image with <i class="bi bi-card-image"></i>.</li>
                     <li>Add notes by clicking on the grid.</li>
                     <li>Select, move, and resize notes directly on the grid.</li>
                     <li>Play back the sequence with ▶ or spacebar.</li>
-                    <li>Export your project with 💾 to save your work.</li>
-                    <li>Export MIDI (🎵) to use in your DAW.</li>
+                    <li>Clear all notes with <i class="bi bi-x-circle"></i> if needed.</li>
+                    <li>Export your project with <i class="bi bi-cloud-arrow-down"></i> to save your work.</li>
+                    <li>Export MIDI <i class="bi bi-file-earmark-music"></i> to use in your DAW.</li>
                 </ol>
                 
                 <div class="file-warning">
@@ -96,7 +105,7 @@
                     <li><strong>Click</strong>: Select or create note</li>
                     <li><strong>Drag</strong>: Move note</li>
                     <li><strong>Right edge</strong>: Resize note</li>
-                    <li><strong>R</strong>: Rotate image</li>
+                    <li><strong>R</strong>: Rotate image (<i class="bi bi-arrow-clockwise"></i>)</li>
                     <li><strong>A</strong>: Add note</li>
                     <li><strong>D</strong>: Delete selected note</li>
                     <li><strong>W</strong>: Increase note length</li>
