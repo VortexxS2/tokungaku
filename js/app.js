@@ -44,24 +44,14 @@ document.addEventListener('DOMContentLoaded', () => {
     TokungakuApp.audio.init();
     TokungakuApp.ui.init();
     
-    // Load any saved project if available
-    const savedProject = TokungakuApp.storage.loadLastSession();
-    if (savedProject) {
-        console.log('Loading saved project...');
-        TokungakuApp.ui.loadProject(savedProject);
-    }
-    
     console.log('Tokungaku initialized successfully');
 });
 
-// Handle window unload to save work
+// Handle window unload to warn about unsaved changes
 window.addEventListener('beforeunload', (e) => {
     if (TokungakuApp.state.modified) {
-        // Save current state automatically
-        TokungakuApp.storage.saveSession();
-        
-        // Optionally, show a confirmation dialog
-        const confirmationMessage = 'You have unsaved changes. Are you sure you want to leave?';
+        // Show a confirmation dialog
+        const confirmationMessage = 'You have unsaved changes. Your changes will be lost if you leave without exporting your project.';
         e.returnValue = confirmationMessage;
         return confirmationMessage;
     }

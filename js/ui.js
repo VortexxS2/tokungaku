@@ -9,6 +9,9 @@ TokungakuApp.ui = {
     imageContainer: null,
     uploadInput: null,
     
+    // Maximum image size in bytes (10MB)
+    MAX_IMAGE_SIZE: 10 * 1024 * 1024,
+    
     /**
      * Initialize the UI system
      */
@@ -47,7 +50,22 @@ TokungakuApp.ui = {
         // Validate file type
         if (!file.type.match('image.*')) {
             alert('Please select an image file.');
+            this.uploadInput.value = ''; // Reset input
             return;
+        }
+        
+        // Check file size
+        if (file.size > this.MAX_IMAGE_SIZE) {
+            const confirmLargeImage = confirm(
+                `The selected image is quite large (${Math.round(file.size / (1024 * 1024))} MB). ` +
+                'Large images may cause performance issues and may be too big to store. ' +
+                'Consider using a smaller image. Continue anyway?'
+            );
+            
+            if (!confirmLargeImage) {
+                this.uploadInput.value = ''; // Reset input
+                return;
+            }
         }
         
         // Create file reader
@@ -78,6 +96,9 @@ TokungakuApp.ui = {
         
         // Read file as data URL
         reader.readAsDataURL(file);
+        
+        // Reset input for future uploads
+        this.uploadInput.value = '';
     },
     
     /**

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tokungaku - musical canvas that transforms your images into melodic experiences</title>
-    <link rel="stylesheet" href="css/styles.css?v=2025-04-17">
+    <link rel="stylesheet" href="css/styles.css?v=2025-04-19">
     <script src="https://cdn.jsdelivr.net/npm/midi-writer-js@3.1.1/browser/midiwriter.min.js"></script>
 </head>
 <body>
@@ -42,8 +42,8 @@
             </div>
             <div class="file-controls">
                 <button id="export-midi-btn">Export MIDI</button>
-                <button id="save-project-btn">Save Project</button>
-                <button id="load-project-btn">Load Project</button>
+                <button id="save-project-btn">Export Project</button>
+                <button id="load-project-btn">Import Project</button>
                 <button id="new-project-btn">New Project</button>
             </div>
         </div>
@@ -85,10 +85,13 @@
                     <li>Add notes by clicking on the grid.</li>
                     <li>Adjust note properties using the controls or keyboard shortcuts.</li>
                     <li>Play back the sequence with the play button or spacebar.</li>
-                    <li>Save your project to local storage.</li>
+                    <li>Export your project as a JSON file to save your work.</li>
+                    <li>Export MIDI to use in your DAW (Digital Audio Workstation).</li>
                 </ol>
                 
-                
+                <div class="file-warning">
+                    <p><strong>Note:</strong> Projects are saved as JSON files on your computer, not in your browser. Remember to export your project before closing to avoid losing your work.</p>
+                </div>
             </div>
             <div class="keyboard-shortcuts">
                 <h3>Keyboard Shortcuts</h3>
@@ -100,6 +103,11 @@
                     <li><strong>Arrow keys</strong>: Move selected note</li>
                     <li><strong>Space</strong>: Play/Stop</li>
                 </ul>
+            </div>
+            
+            <div class="image-size-info">
+                <h3>Image Size</h3>
+                <p>For best performance, use images smaller than 10MB. Larger images may cause performance issues.</p>
             </div>
         </div>
         
@@ -120,11 +128,11 @@
 
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
-    <script src="js/app.js?v=2025-04-17"></script>
-    <script src="js/storage.js?v=2025-04-17"></script>
-    <script src="js/grid.js?v=2025-04-17"></script>
-    <script src="js/notes.js?v=2025-04-17"></script>
-    <script src="js/audio.js?v=2025-04-17"></script>
-    <script src="js/ui.js?v=2025-04-17"></script>
+    <script src="js/app.js?v=2025-04-19"></script>
+    <script src="js/storage.js?v=2025-04-19"></script>
+    <script src="js/grid.js?v=2025-04-19"></script>
+    <script src="js/notes.js?v=2025-04-19"></script>
+    <script src="js/audio.js?v=2025-04-19"></script>
+    <script src="js/ui.js?v=2025-04-19"></script>
 </body>
 </html>

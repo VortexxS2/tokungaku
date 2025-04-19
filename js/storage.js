@@ -1,100 +1,45 @@
 /**
  * Tokungaku - Storage Management
  * 
- * This module handles local storage of the application state.
+ * This module handles file-based import/export of the application state.
  */
 
 TokungakuApp.storage = {
-    // Storage keys
-    STORAGE_KEY: 'tokungaku_app_state',
+    // Maximum image size in bytes (10MB)
+    MAX_IMAGE_SIZE: 10 * 1024 * 1024,
     
     /**
      * Initialize storage system
      */
     init: function() {
-        // Check if local storage is available
-        if (!this.isLocalStorageAvailable()) {
-            console.warn('Local storage is not available. Your work will not be saved automatically.');
-            return;
-        }
+        // Set up event listeners for export/import operations
+        document.getElementById('save-project-btn').addEventListener('click', this.exportProject.bind(this));
+        document.getElementById('load-project-btn').addEventListener('click', this.importProject.bind(this));
         
-        // Set up event listeners for save/load operations
-        document.getElementById('save-project-btn').addEventListener('click', this.saveProject.bind(this));
-        document.getElementById('load-project-btn').addEventListener('click', this.loadProject.bind(this));
+        // Create a hidden file input for project import
+        this.createImportInput();
     },
     
     /**
-     * Check if local storage is available
-     * @returns {boolean} True if local storage is available
+     * Create hidden file input for project import
      */
-    isLocalStorageAvailable: function() {
-        try {
-            const test = '__storage_test__';
-            localStorage.setItem(test, test);
-            localStorage.removeItem(test);
-            return true;
-        } catch (e) {
-            return false;
-        }
-    },
-    
-    /**
-     * Save current application state to local storage
-     */
-    saveSession: function() {
-        if (!this.isLocalStorageAvailable()) return;
-        
-        // Create a serializable representation of the state
-        const appState = {
-            config: {
-                columns: TokungakuApp.config.columns,
-                bpm: TokungakuApp.config.bpm,
-                // Add these lines
-                gridColor: TokungakuApp.config.gridColor,
-                gridLineColor: TokungakuApp.config.gridLineColor,
-                instrument: document.getElementById('instrument-select').value
-            },
-            notes: TokungakuApp.state.notes,
-            image: TokungakuApp.state.currentImage,
-            lastSaved: new Date().toISOString()
-        };
-        
-        try {
-            localStorage.setItem(this.STORAGE_KEY, JSON.stringify(appState));
-            TokungakuApp.state.modified = false;
-            console.log('Session saved successfully');
-        } catch (e) {
-            console.error('Failed to save session:', e);
+    createImportInput: function() {
+        // Create file input if it doesn't exist
+        if (!document.getElementById('project-import')) {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.id = 'project-import';
+            input.accept = '.json';
+            input.style.display = 'none';
+            input.addEventListener('change', this.handleProjectFileSelect.bind(this));
+            document.body.appendChild(input);
         }
     },
     
     /**
-     * Load application state from local storage
-     * @returns {Object|null} The loaded state or null if not available
+     * Export current project to JSON file
      */
-    loadLastSession: function() {
-        if (!this.isLocalStorageAvailable()) return null;
-        
-        try {
-            const savedState = localStorage.getItem(this.STORAGE_KEY);
-            if (!savedState) return null;
-            
-            return JSON.parse(savedState);
-        } catch (e) {
-            console.error('Failed to load session:', e);
-            return null;
-        }
-    },
-    
-    /**
-     * Save current project with a name
-     */
-    saveProject: function() {
-        if (!this.isLocalStorageAvailable()) {
-            alert('Local storage is not available. Cannot save project.');
-            return;
-        }
-        
+    exportProject: function() {
         // Prompt user for project name
         const projectName = prompt('Enter a name for your project:', 'My Tokungaku Project');
         if (!projectName) return; // User cancelled
@@ -105,7 +50,6 @@ TokungakuApp.storage = {
             config: {
                 columns: TokungakuApp.config.columns,
                 bpm: TokungakuApp.config.bpm,
-                // Add these lines
                 gridColor: TokungakuApp.config.gridColor,
                 gridLineColor: TokungakuApp.config.gridLineColor,
                 instrument: document.getElementById('instrument-select').value
@@ -116,132 +60,136 @@ TokungakuApp.storage = {
         };
         
         try {
-            // Get existing projects
-            let projects = JSON.parse(localStorage.getItem('tokungaku_projects') || '[]');
+            // Convert to JSON string
+            const jsonData = JSON.stringify(projectData, null, 2);
             
-            // Check if a project with this name already exists
-            const existingIndex = projects.findIndex(p => p.name === projectName);
-            if (existingIndex >= 0) {
-                const overwrite = confirm(`A project named "${projectName}" already exists. Overwrite it?`);
-                if (overwrite) {
-                    projects[existingIndex] = projectData;
-                } else {
-                    return; // User cancelled
-                }
-            } else {
-                projects.push(projectData);
-            }
+            // Create a blob with the JSON data
+            const blob = new Blob([jsonData], { type: 'application/json' });
             
-            // Save projects
-            localStorage.setItem('tokungaku_projects', JSON.stringify(projects));
+            // Create a URL for the blob
+            const url = URL.createObjectURL(blob);
             
-            // Also save as current session
-            localStorage.setItem(this.STORAGE_KEY, JSON.stringify(projectData));
+            // Create a download link
+            const downloadLink = document.createElement('a');
+            downloadLink.href = url;
+            downloadLink.download = `${projectName.replace(/[^a-zA-Z0-9]/g, '_')}.json`;
             
-            TokungakuApp.state.modified = false;
-            alert(`Project "${projectName}" saved successfully.`);
+            // Append to document, click, and remove
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+            
+            // Release the URL object
+            URL.revokeObjectURL(url);
+            
+            console.log('Project exported successfully');
         } catch (e) {
-            console.error('Failed to save project:', e);
-            alert('Failed to save project: ' + e.message);
+            console.error('Failed to export project:', e);
+            alert('Failed to export project: ' + e.message);
         }
     },
     
     /**
-     * Load a saved project
+     * Import project from JSON file
      */
-    loadProject: function() {
-        if (!this.isLocalStorageAvailable()) {
-            alert('Local storage is not available. Cannot load projects.');
+    importProject: function() {
+        // Trigger the hidden file input
+        const input = document.getElementById('project-import');
+        if (input) {
+            input.click();
+        } else {
+            this.createImportInput();
+            document.getElementById('project-import').click();
+        }
+    },
+    
+    /**
+     * Handle file selection for project import
+     * @param {Event} e - Change event
+     */
+    handleProjectFileSelect: function(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+        
+        // Validate file type
+        if (file.type !== 'application/json' && !file.name.endsWith('.json')) {
+            alert('Please select a JSON file.');
+            e.target.value = ''; // Reset input
             return;
         }
         
-        try {
-            // Get existing projects
-            const projects = JSON.parse(localStorage.getItem('tokungaku_projects') || '[]');
-            
-            if (projects.length === 0) {
-                alert('No saved projects found.');
+        // Check if there are unsaved changes
+        if (TokungakuApp.state.modified) {
+            const confirmImport = confirm('You have unsaved changes. Are you sure you want to import a new project?');
+            if (!confirmImport) {
+                e.target.value = ''; // Reset input
                 return;
             }
-            
-            // Create a selection list
-            let options = '';
-            projects.forEach((project, index) => {
-                const date = new Date(project.savedAt).toLocaleString();
-                options += `<option value="${index}">${project.name} (${date})</option>`;
-            });
-            
-            // Create a temporary select dialog
-            const selectDiv = document.createElement('div');
-            selectDiv.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:9999;';
-            selectDiv.innerHTML = `
-                <div style="background:#fff;padding:20px;border-radius:5px;max-width:500px;width:90%;">
-                    <h3>Load Project</h3>
-                    <p>Select a project to load:</p>
-                    <select id="project-select" style="width:100%;margin:10px 0;padding:5px;">
-                        ${options}
-                    </select>
-                    <div style="display:flex;justify-content:space-between;margin-top:15px;">
-                        <button id="cancel-load">Cancel</button>
-                        <button id="confirm-load" style="background-color:var(--primary-color);color:#fff;">Load</button>
-                    </div>
-                </div>
-            `;
-            
-            document.body.appendChild(selectDiv);
-            
-            // Handle cancel button
-            document.getElementById('cancel-load').addEventListener('click', () => {
-                document.body.removeChild(selectDiv);
-            });
-            
-            // Handle load button
-            document.getElementById('confirm-load').addEventListener('click', () => {
-                const select = document.getElementById('project-select');
-                const selectedIndex = parseInt(select.value);
-                const projectData = projects[selectedIndex];
+        }
+        
+        // Read file
+        const reader = new FileReader();
+        
+        reader.onload = (event) => {
+            try {
+                const projectData = JSON.parse(event.target.result);
+                
+                // Validate project data
+                if (!projectData || !projectData.config || !Array.isArray(projectData.notes)) {
+                    throw new Error('Invalid project file format.');
+                }
+                
+                // Check image size if present
+                if (projectData.image) {
+                    const estimatedSize = this.estimateBase64Size(projectData.image);
+                    if (estimatedSize > this.MAX_IMAGE_SIZE) {
+                        const confirmLargeImage = confirm(
+                            'The image in this project is quite large (approximately ' + 
+                            Math.round(estimatedSize / (1024 * 1024)) + 
+                            ' MB). This may cause performance issues. Continue anyway?'
+                        );
+                        
+                        if (!confirmLargeImage) {
+                            e.target.value = ''; // Reset input
+                            return;
+                        }
+                    }
+                }
                 
                 // Load the project
                 TokungakuApp.ui.loadProject(projectData);
                 
-                // Save as current session
-                localStorage.setItem(this.STORAGE_KEY, JSON.stringify(projectData));
-                
-                document.body.removeChild(selectDiv);
                 alert(`Project "${projectData.name}" loaded successfully.`);
-            });
-        } catch (e) {
-            console.error('Failed to load projects:', e);
-            alert('Failed to load projects: ' + e.message);
-        }
+            } catch (err) {
+                console.error('Failed to parse project file:', err);
+                alert('Failed to load project: ' + err.message);
+            }
+            
+            e.target.value = ''; // Reset input for future imports
+        };
+        
+        reader.onerror = () => {
+            alert('Error reading file.');
+            e.target.value = ''; // Reset input
+        };
+        
+        reader.readAsText(file);
     },
     
     /**
-     * Delete a saved project
-     * @param {string} projectName - Name of the project to delete
-     * @returns {boolean} True if project was deleted successfully
+     * Estimate the size of a base64 encoded string in bytes
+     * @param {string} base64String - Base64 encoded string
+     * @returns {number} Estimated size in bytes
      */
-    deleteProject: function(projectName) {
-        if (!this.isLocalStorageAvailable()) return false;
+    estimateBase64Size: function(base64String) {
+        // Remove metadata part if present (e.g., "data:image/png;base64,")
+        const base64Data = base64String.split(',')[1] || base64String;
         
-        try {
-            // Get existing projects
-            let projects = JSON.parse(localStorage.getItem('tokungaku_projects') || '[]');
-            
-            // Find the project
-            const projectIndex = projects.findIndex(p => p.name === projectName);
-            if (projectIndex === -1) return false;
-            
-            // Remove the project
-            projects.splice(projectIndex, 1);
-            
-            // Save updated projects list
-            localStorage.setItem('tokungaku_projects', JSON.stringify(projects));
-            
-            return true;
-        } catch (e) {
-            console.error('Failed to delete project:', e);
-            return false;
-        }
+        // Calculate size: base64 represents 6 bits in 8 bits (4 chars = 3 bytes)
+        // Add padding to handle strings that aren't multiples of 4
+        const paddedLength = base64Data.length + (4 - (base64Data.length % 4)) % 4;
+        
+        // Calculate size in bytes
+        return Math.floor((paddedLength / 4) * 3);
     }
 };
