@@ -11,35 +11,43 @@ Tokungaku is a free browser-based musical canvas that transforms your images int
 ## Features
 
 - Upload and display background images
+- Rotate background images in 90-degree increments
 - Piano-roll grid overlay (3 octaves, configurable columns)
-- Create, edit, move, and resize notes
+- Create, edit, move, and resize notes directly on the grid
 - Play back the created sequences
 - Adjustable BPM and time signature
 - Keyboard shortcuts for common operations
 - Export sequences as MIDI files
-- Save and load projects using local storage
+- Save and load projects using JSON files
 - Multiple instrument sounds (piano, synth, bass, guitar, violin, flute, drums, xylophone)
 - Customizable grid color and opacity
 - Visual playback position indicator
 
 ## Usage
 
-1. (Optional) Upload a background image.
-1. Add notes by clicking on the grid.
-1. Adjust note properties using the controls or keyboard shortcuts.
-1. Play back the sequence with the play button or spacebar.
-1. Save your project to local storage.
-1. Export MIDI to use in your DAW (Digital Audio Workstation).
+1. Upload a background image with the image upload button.
+2. Add notes by clicking on the grid.
+3. Select, move, and resize notes directly on the grid.
+4. Play back the sequence with the play button or spacebar.
+5. Clear all notes or create a new project as needed.
+6. Export your project to save your work as a JSON file.
+7. Export MIDI to use in your DAW (Digital Audio Workstation).
+
+### Mouse Actions
+
+- **Click**: Select or create note
+- **Drag**: Move note
+- **Right edge**: Resize note
 
 
-## Keyboard Shortcuts
-
+### Keyboard Shortcuts
 - **A**: Add note
 - **D**: Delete selected note
 - **W**: Increase note length
 - **S**: Decrease note length
 - **Arrow keys**: Move selected note
 - **Space**: Play/Stop
+- **R**: Rotate image
 
 ## Technical Details
 
@@ -58,6 +66,14 @@ Tokungaku uses minimal external dependencies:
 
 - **[Tone.js](https://tonejs.github.io/)**: For instrument sounds and audio synthesis
 - **[MidiWriterJS](https://github.com/grimmdude/MidiWriterJS)**: For MIDI file export
+- **[Bootstrap Icons](https://icons.getbootstrap.com/)**: For UI icons
+
+### Project Storage
+
+- Projects are saved as JSON files on your computer
+- Images are embedded within the project files as data URLs
+- Projects can be imported back into the application at any time
+- Local storage is not used to avoid browser storage limitations
 
 ## Using MIDI Export with DAWs
 
@@ -67,7 +83,7 @@ Tokungaku allows you to export your compositions as standard MIDI files that can
 
 1. Create your composition in Tokungaku
 2. Select your preferred instrument (this will be exported as MIDI program information)
-3. Click the "Export MIDI" button in the top bar
+3. Click the "Export MIDI" button in the project controls
 4. Save the .mid file to your computer
 5. In your DAW software:
    - Import/Open the MIDI file (usually via File > Import or drag-and-drop)
@@ -78,7 +94,12 @@ Tokungaku allows you to export your compositions as standard MIDI files that can
 
 The exported MIDI contains all musical data but no actual audio samples, allowing you to use your DAW's professional sound libraries for the final production.
 
+## Image Size Recommendations
+
+For best performance, use images smaller than 10MB. Larger images may cause performance issues on some devices. The application will warn you if you attempt to upload an exceptionally large image.
+
 ## Limitations
 
-- Audio playback uses Web Audio API and may vary slightly between browsers.
-- For best experience, use a desktop browser with a physical keyboard.
+- Audio playback uses Web Audio API and may vary slightly between browsers
+- For best experience, use a desktop browser with a physical keyboard
+- Image rotation may affect performance on very large images
