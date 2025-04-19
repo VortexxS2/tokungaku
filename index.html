@@ -13,8 +13,8 @@
         <h1>Tokungaku</h1>
         <div class="controls">
             <div class="transport-controls">
-                <button id="play-btn" title="Play (Space)">▶</button>
-                <button id="stop-btn" title="Stop (Space)">■</button>
+                <button id="play-btn" title="Play (Space)"><i class="bi bi-play-fill"></i></button>
+                <button id="stop-btn" title="Stop (Space)"><i class="bi bi-stop-fill"></i></button>
                 <label for="bpm">BPM:</label>
                 <input type="number" id="bpm" min="40" max="300" value="120">
             </div>
@@ -89,10 +89,10 @@
             <div class="usage-guide">
                 <h3>Usage</h3>
                 <ol>
-                    <li>(Optional) Upload a background image with <i class="bi bi-card-image"></i>.</li>
+                    <li>Upload a background image with <i class="bi bi-card-image"></i>.</li>
                     <li>Add notes by clicking on the grid.</li>
                     <li>Select, move, and resize notes directly on the grid.</li>
-                    <li>Play back the sequence with ▶ or spacebar.</li>
+                    <li>Play back the sequence with <i class="bi bi-play-fill"></i> or spacebar.</li>
                     <li>Clear all notes with <i class="bi bi-x-circle"></i> if needed.</li>
                     <li>Export your project with <i class="bi bi-cloud-arrow-down"></i> to save your work.</li>
                     <li>Export MIDI <i class="bi bi-file-earmark-music"></i> to use in your DAW.</li>
@@ -103,18 +103,23 @@
                 </div>
             </div>
             <div class="keyboard-shortcuts">
-                <h3>Keyboard Shortcuts</h3>
+                <h3>Mouse Actions</h3>
                 <ul>
                     <li><strong>Click</strong>: Select or create note</li>
                     <li><strong>Drag</strong>: Move note</li>
                     <li><strong>Right edge</strong>: Resize note</li>
-                    <li><strong>R</strong>: Rotate image (<i class="bi bi-arrow-clockwise"></i>)</li>
+                </ul>
+            </div>
+            <div class="keyboard-shortcuts">
+                <h3>Keyboard Shortcuts</h3>
+                <ul>
                     <li><strong>A</strong>: Add note</li>
                     <li><strong>D</strong>: Delete selected note</li>
                     <li><strong>W</strong>: Increase note length</li>
                     <li><strong>S</strong>: Decrease note length</li>
                     <li><strong>Arrow keys</strong>: Move selected note</li>
                     <li><strong>Space</strong>: Play/Stop</li>
+                    <li><strong>R</strong>: Rotate image (<i class="bi bi-arrow-clockwise"></i>)</li>
                 </ul>
             </div>
             

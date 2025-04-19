@@ -45,6 +45,20 @@ TokungakuApp.grid = {
     },
     
     /**
+     * Check if a row is a semitone (black key)
+     * @param {number} row - Grid row
+     * @returns {boolean} True if row is a semitone
+     */
+    isSemitone: function(row) {
+        // Convert to piano key from bottom to top (0 = lowest)
+        const keyIndex = TokungakuApp.config.rows - 1 - row;
+        // Get the key within the octave (0-11)
+        const keyInOctave = keyIndex % 12;
+        // Semitones are at positions 1, 3, 6, 8, 10 (corresponding to C#, D#, F#, G#, A#)
+        return [1, 3, 6, 8, 10].includes(keyInOctave);
+    },
+    
+    /**
      * Render the grid based on current configuration
      */
     render: function() {
@@ -59,6 +73,14 @@ TokungakuApp.grid = {
             for (let col = 0; col < columns; col++) {
                 const cell = document.createElement('div');
                 cell.className = 'grid-cell';
+                
+                // Set different background for semitones (black keys) and whole tones (white keys)
+                if (this.isSemitone(row)) {
+                    cell.classList.add('semitone');
+                } else {
+                    cell.classList.add('wholetone');
+                }
+                
                 cell.style.width = `${this.cellWidth}px`;
                 cell.style.height = `${this.cellHeight}px`;
                 cell.style.left = `${col * this.cellWidth}px`;

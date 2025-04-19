@@ -92,6 +92,15 @@ TokungakuApp.notes = {
         noteElement.style.width = `${TokungakuApp.grid.cellWidth * note.length}px`;
         noteElement.style.height = `${TokungakuApp.grid.cellHeight}px`;
         
+        // Apply semitone/wholetone class based on the row
+        if (TokungakuApp.grid.isSemitone(note.row)) {
+            noteElement.classList.remove('on-wholetone');
+            noteElement.classList.add('on-semitone');
+        } else {
+            noteElement.classList.remove('on-semitone');
+            noteElement.classList.add('on-wholetone');
+        }
+        
         // Apply selection state
         if (TokungakuApp.state.selectedNoteId === note.id) {
             noteElement.classList.add('selected');
