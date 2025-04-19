@@ -25,6 +25,13 @@ TokungakuApp.ui = {
         this.uploadInput.addEventListener('change', this.handleImageUpload.bind(this));
         document.getElementById('new-project-btn').addEventListener('click', this.createNewProject.bind(this));
         
+        // Set up clear notes buttons
+        document.getElementById('clear-notes-btn').addEventListener('click', this.clearAllNotes.bind(this));
+        const sidebarClearBtn = document.getElementById('clear-notes-btn-sidebar');
+        if (sidebarClearBtn) {
+            sidebarClearBtn.addEventListener('click', this.clearAllNotes.bind(this));
+        }
+        
         // Initialize grid appearance controls
         this.initGridAppearance();
 
@@ -235,10 +242,48 @@ TokungakuApp.ui = {
         }
     },
 
+    /**
+     * Clear all notes from the project but keep the image and settings
+     */
+    clearAllNotes: function() {
+        // Check if there are any notes to clear
+        if (TokungakuApp.state.notes.length === 0) {
+            alert('No notes to clear.');
+            return;
+        }
+        
+        // Confirm with user
+        const confirmClear = confirm('Are you sure you want to clear all notes?');
+        if (!confirmClear) {
+            return; // User cancelled
+        }
+        
+        // Reset notes
+        TokungakuApp.state.notes = [];
+        TokungakuApp.state.selectedNoteId = null;
+        TokungakuApp.state.modified = true;
+        
+        // Reset note ID counter
+        TokungakuApp.notes.nextNoteId = 1;
+        
+        // Clear notes container
+        TokungakuApp.notes.container.innerHTML = '';
+        
+        // Stop any playback
+        if (TokungakuApp.audio.playbackState.isPlaying) {
+            TokungakuApp.audio.stopPlayback();
+        }
+        
+        console.log('All notes cleared');
+    },
+    
+    /**
+     * Create a new empty project (clear all notes and image)
+     */
     createNewProject: function() {
         // Check if there are unsaved changes
         if (TokungakuApp.state.modified) {
-            const confirmNew = confirm('You have unsaved changes. Are you sure you want to create a new project?');
+            const confirmNew = confirm('You have unsaved changes. Are you sure you want to clear this project?');
             if (!confirmNew) {
                 return; // User cancelled
             }
@@ -277,17 +322,12 @@ TokungakuApp.ui = {
         TokungakuApp.notes.nextNoteId = 1;
         TokungakuApp.notes.container.innerHTML = '';
         
-        // Disable note control buttons
-        document.getElementById('delete-note-btn').disabled = true;
-        document.getElementById('increase-length-btn').disabled = true;
-        document.getElementById('decrease-length-btn').disabled = true;
-        
         // Stop any playback
         if (TokungakuApp.audio.playbackState.isPlaying) {
             TokungakuApp.audio.stopPlayback();
         }
         
-        console.log('New project created');
+        console.log('Project cleared');
     },
     
     /**

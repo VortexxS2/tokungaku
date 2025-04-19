@@ -41,28 +41,24 @@
                 <input type="number" id="steps" min="4" max="64" value="32">
             </div>
             <div class="file-controls">
-                <button id="export-midi-btn">Export MIDI</button>
-                <button id="save-project-btn">Export Project</button>
-                <button id="load-project-btn">Import Project</button>
-                <button id="new-project-btn">New Project</button>
+                <button id="export-midi-btn" title="Export MIDI">🎵</button>
+                <button id="save-project-btn" title="Export Project">💾</button>
+                <button id="load-project-btn" title="Import Project">📂</button>
+                <button id="new-project-btn" title="Clear Project">🗑️</button>
+                <button id="clear-notes-btn" title="Clear All Notes">✨</button>
             </div>
         </div>
     </header>
     
     <main>
         <div class="sidebar">
-            <div class="image-controls">
-                <input type="file" id="image-upload" accept="image/*" hidden>
-                <button id="upload-image-btn">Upload Image</button>
-                <button id="remove-image-btn" disabled>Remove Image</button>
-            </div>
-            <div class="note-controls">
-                <h3>Note Options</h3>
-                <button id="add-note-btn" title="Add Note (A)">Add Note</button>
-                <button id="delete-note-btn" title="Delete Note (D)" disabled>Delete Note</button>
-                <div class="note-length">
-                    <button id="increase-length-btn" title="Increase Length (W)" disabled>+</button>
-                    <button id="decrease-length-btn" title="Decrease Length (S)" disabled>-</button>
+            <div class="editor-controls">
+                <h3>Project Controls</h3>
+                <div class="control-group">
+                    <input type="file" id="image-upload" accept="image/*" hidden>
+                    <button id="upload-image-btn" title="Upload Background Image">🖼️</button>
+                    <button id="remove-image-btn" title="Remove Image" disabled>🖼️❌</button>
+                    <button id="clear-notes-btn-sidebar" title="Clear All Notes">✨</button>
                 </div>
             </div>
             <div class="grid-appearance">
@@ -81,12 +77,12 @@
             <div class="usage-guide">
                 <h3>Usage</h3>
                 <ol>
-                    <li>(Optional) Upload a background image.</li>
+                    <li>(Optional) Upload a background image with 🖼️.</li>
                     <li>Add notes by clicking on the grid.</li>
-                    <li>Adjust note properties using the controls or keyboard shortcuts.</li>
-                    <li>Play back the sequence with the play button or spacebar.</li>
-                    <li>Export your project as a JSON file to save your work.</li>
-                    <li>Export MIDI to use in your DAW (Digital Audio Workstation).</li>
+                    <li>Select, move, and resize notes directly on the grid.</li>
+                    <li>Play back the sequence with ▶ or spacebar.</li>
+                    <li>Export your project with 💾 to save your work.</li>
+                    <li>Export MIDI (🎵) to use in your DAW.</li>
                 </ol>
                 
                 <div class="file-warning">
@@ -96,6 +92,9 @@
             <div class="keyboard-shortcuts">
                 <h3>Keyboard Shortcuts</h3>
                 <ul>
+                    <li><strong>Click</strong>: Select or create note</li>
+                    <li><strong>Drag</strong>: Move note</li>
+                    <li><strong>Right edge</strong>: Resize note</li>
                     <li><strong>A</strong>: Add note</li>
                     <li><strong>D</strong>: Delete selected note</li>
                     <li><strong>W</strong>: Increase note length</li>

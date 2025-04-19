@@ -34,12 +34,6 @@ TokungakuApp.notes = {
         document.addEventListener('mousemove', this.handleMouseMove.bind(this));
         document.addEventListener('mouseup', this.handleMouseUp.bind(this));
         
-        // Button event listeners
-        document.getElementById('add-note-btn').addEventListener('click', this.addNoteAtCenter.bind(this));
-        document.getElementById('delete-note-btn').addEventListener('click', this.deleteSelectedNote.bind(this));
-        document.getElementById('increase-length-btn').addEventListener('click', this.increaseSelectedNoteLength.bind(this));
-        document.getElementById('decrease-length-btn').addEventListener('click', this.decreaseSelectedNoteLength.bind(this));
-        
         // Keyboard shortcuts
         document.addEventListener('keydown', this.handleKeyDown.bind(this));
     },
@@ -139,16 +133,6 @@ TokungakuApp.notes = {
             if (noteElement) {
                 noteElement.classList.add('selected');
             }
-            
-            // Enable note control buttons
-            document.getElementById('delete-note-btn').disabled = false;
-            document.getElementById('increase-length-btn').disabled = false;
-            document.getElementById('decrease-length-btn').disabled = false;
-        } else {
-            // Disable note control buttons
-            document.getElementById('delete-note-btn').disabled = true;
-            document.getElementById('increase-length-btn').disabled = true;
-            document.getElementById('decrease-length-btn').disabled = true;
         }
     },
     
